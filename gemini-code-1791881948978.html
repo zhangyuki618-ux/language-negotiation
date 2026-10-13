@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Lost in the comments? — Language, help and participation on RedNote</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- React & ReactDOM CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <!-- Babel Compiler for In-Browser JSX Parsing -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+    
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+      background-color: #FAF8F5;
+      color: #1E293B;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="selection:bg-pink-100 selection:text-pink-900">
+
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // --- High-Resolution Original Screenshots Data ---
+    const ARCHIVAL_EVIDENCE = {
+      IMG_3671: {
+        id: "IMG_3671",
+        title: "Creator's Video Lesson (666 Explanation)",
+        subtitle: "Bilingual explanation of internet slang",
+        image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='868' viewBox='0 0 400 868' style='background:%23000;'><rect width='400' height='40' fill='%23000'/><text x='30' y='26' fill='%23fff' font-family='sans-serif' font-size='12' font-weight='bold'>18:55</text><rect x='120' y='60' width='160' height='200' fill='%23111'/><text x='200' y='120' fill='%23FFD700' font-family='sans-serif' font-size='32' font-weight='bold' text-anchor='middle'>666</text><text x='200' y='150' fill='%23fff' font-family='sans-serif' font-size='14' text-anchor='middle'>this just means very good</text><rect x='0' y='280' width='400' height='588' rx='20' fill='%23fff'/><text x='20' y='320' fill='%23333' font-family='sans-serif' font-size='13'>共 1.6 万 条评论</text><text x='60' y='365' fill='%23111' font-family='sans-serif' font-size='14' font-weight='bold'>帅山姆先生</text><rect x='135' y='352' width='32' height='16' rx='8' fill='%23FF2442'/><text x='151' y='364' fill='%23fff' font-family='sans-serif' font-size='10' text-anchor='middle'>作者</text><text x='60' y='390' fill='%23333' font-family='sans-serif' font-size='13'>Tiktok refugees! Must know CHINESE(3)</text><text x='60' y='410' fill='%23333' font-family='sans-serif' font-size='13'>must know chinese internet slang!</text><text x='60' y='430' fill='%23333' font-family='sans-serif' font-size='13'>好啦 英语老师改行教中文了🤣</text></svg>",
+        transcription: [
+          { speaker: "帅山姆先生 (Creator)", text: "666 — this just means 'very good' (意思是非常好)" },
+          { speaker: "帅山姆先生 (Post Caption)", text: "Tiktok refugees! Must know CHINESE(3) must know chinese internet slang! 好啦 英语老师改行教中文了🤣 直播间来了一堆tiktok refugees 来教几句实用中文吧" }
+        ],
+        explanation: "An explanation can make a community-specific expression accessible to unfamiliar users. Here, language support is provided through a creator's bilingual teaching."
+      },
+      IMG_3677: {
+        id: "IMG_3677",
+        title: "Translation Help Request & Advice",
+        subtitle: "Practical language support in comment exchange",
+        image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='868' viewBox='0 0 400 868' style='background:%23000;'><rect width='400' height='40' fill='%23000'/><text x='30' y='26' fill='%23fff' font-family='sans-serif' font-size='12' font-weight='bold'>19:11</text><rect x='0' y='280' width='400' height='588' rx='20' fill='%23fff'/><text x='20' y='320' fill='%23333' font-family='sans-serif' font-size='13'>共 291 条评论</text><text x='60' y='360' fill='%23666' font-family='sans-serif' font-size='14' font-weight='bold'>Shelby</text><text x='60' y='385' fill='%23111' font-family='sans-serif' font-size='13'>But I would like to learn how to translate my</text><text x='60' y='405' fill='%23111' font-family='sans-serif' font-size='13'>keyboard to mandarin.</text><text x='80' y='450' fill='%23666' font-family='sans-serif' font-size='13' font-weight='bold'>發芽的綠豆</text><text x='80' y='472' fill='%23111' font-family='sans-serif' font-size='13'>很多美国人都用 google translate啊</text><text x='80' y='492' fill='%23111' font-family='sans-serif' font-size='13'>Many Americans are using google translate!</text><text x='80' y='530' fill='%23666' font-family='sans-serif' font-size='13' font-weight='bold'>Shelby</text><text x='80' y='550' fill='%23111' font-family='sans-serif' font-size='13'>回复 發芽的綠豆: 谢谢你！</text></svg>",
+        transcription: [
+          { speaker: "Shelby", text: "I agree with everything you said. I don't want to be viral. I actually was never viral on tiktok either. But I would like to learn how to translate my keyboard to mandarin. Also learn more things in general :)" },
+          { speaker: "發芽的綠豆", text: "很多美国人都用 google translate啊 🍉 Many Americans are using google translate!" },
+          { speaker: "Shelby", text: "回复 發芽的綠豆: 谢谢贴！ (Thank you!)" },
+          { speaker: "Jokoya", text: "The keyboard still won't make it correct in translation" }
+        ],
+        explanation: "A participant asks for practical language help, another suggests a translation resource, and the recipient acknowledges the suggestion."
+      },
+      IMG_3678: {
+        id: "IMG_3678",
+        title: "Expectations to Include Chinese",
+        subtitle: "Reposted request and participant response",
+        image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='868' viewBox='0 0 400 868' style='background:%23000;'><rect width='400' height='40' fill='%23000'/><text x='30' y='26' fill='%23fff' font-family='sans-serif' font-size='12' font-weight='bold'>19:11</text><rect x='0' y='280' width='400' height='588' rx='20' fill='%23fff'/><text x='20' y='320' fill='%23333' font-family='sans-serif' font-size='13'>共 291 条评论</text><text x='60' y='360' fill='%23666' font-family='sans-serif' font-size='14'>laurenator424</text><text x='60' y='380' fill='%23111' font-family='sans-serif' font-size='13'>hi we officially got kicked out tonight😭</text><rect x='80' y='410' width='240' height='90' rx='8' fill='%23222'/><text x='90' y='430' fill='%23fff' font-family='sans-serif' font-size='11'>Oniss: if you're going to comment and post</text><text x='90' y='445' fill='%23fff' font-family='sans-serif' font-size='11'>make sure to leave a chinese translation...</text><text x='80' y='530' fill='%23666' font-family='sans-serif' font-size='13'>laurenator424</text><text x='80' y='550' fill='%23111' font-family='sans-serif' font-size='13'>回复 發芽的綠豆: ok! 好</text><text x='80' y='580' fill='%23666' font-family='sans-serif' font-size='13'>發芽的綠豆</text><text x='80' y='600' fill='%23111' font-family='sans-serif' font-size='13'>回复 laurenator424: 谢谢你 Thank you!</text></svg>",
+        transcription: [
+          { speaker: "laurenator424", text: "hi we officially got kicked out tonight😭" },
+          { speaker: "發芽的綠豆 (Reposting an image containing a comment attributed to Oniss)", text: "Oniss: 'if you're going to comment and post make sure to leave a chinese translation as well! it's their app and they shouldn't have to adapt to us' / 如果您要评论和发帖，请务必留下中文翻译！这是他们的应用程序，他们不应该适应我们" },
+          { speaker: "laurenator424", text: "回复 發芽的綠豆: ok! 好" },
+          { speaker: "發芽的綠豆", text: "回复 laurenator424: 谢谢你 Thank you!" }
+        ],
+        explanation: "The request expresses an expectation to include Chinese and offers a rationale about who should adapt. The recipient acknowledges it in this exchange."
+      },
+      IMG_3674: {
+        id: "IMG_3674",
+        title: "Peer Explanation & Correction",
+        subtitle: "Slang guidance and participant refinement",
+        image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='868' viewBox='0 0 400 868' style='background:%23000;'><rect width='400' height='40' fill='%23000'/><text x='30' y='26' fill='%23fff' font-family='sans-serif' font-size='12' font-weight='bold'>19:00</text><rect x='0' y='280' width='400' height='588' rx='20' fill='%23fff'/><text x='60' y='360' fill='%23666' font-family='sans-serif' font-size='14'>Anthony</text><text x='60' y='385' fill='%23111' font-family='sans-serif' font-size='12'>xswl = 笑死我了 ... yyds = 永远都是</text><text x='80' y='430' fill='%23666' font-family='sans-serif' font-size='13'>好运大王</text><text x='80' y='450' fill='%23111' font-family='sans-serif' font-size='13'>yyds 永远的神</text></svg>",
+        transcription: [
+          { speaker: "Anthony", text: "xswl = 笑死我了 means lmao. hhhh = 哈哈哈哈 means hahahaha. u1s1 = 有一说一 (yǒu yī shuō yī) means to be honest. yyds = 永远都是 means always the god (G.O.A.T)" },
+          { speaker: "好运大王", text: "yyds 永远的神" }
+        ],
+        explanation: "The explanation is supplemented and corrected by another participant."
+      }
+    };
+
+    function App() {
+      const [currentStep, setCurrentStep] = useState(0); // 0: Opening, 1: Encounter 1, 2: Encounter 2, 3: Encounter 3, 4: Findings
+      const [showAbout, setShowAbout] = useState(false);
+      const [activeModalEvidence, setActiveModalEvidence] = useState(null);
+
+      // Encounter 1 state
+      const [enc1Revealed, setEnc1Revealed] = useState(false);
+
+      // Encounter 2 state
+      const [enc2Stage, setEnc2Stage] = useState(1); // 1: Request, 2: Advice, 3: Response
+      const [showPeerCorrection, setShowPeerCorrection] = useState(false);
+
+      // Encounter 3 state
+      const [enc3Choice, setEnc3Choice] = useState(null);
+      const [enc3RevealedActual, setEnc3RevealedActual] = useState(false);
+
+      const resetExhibition = () => {
+        setCurrentStep(0);
+        setShowAbout(false);
+        setActiveModalEvidence(null);
+        setEnc1Revealed(false);
+        setEnc2Stage(1);
+        setShowPeerCorrection(false);
+        setEnc3Choice(null);
+        setEnc3RevealedActual(false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+
+      return (
+        <div className="min-h-screen flex flex-col justify-between max-w-5xl mx-auto px-4 py-6 md:px-8 md:py-8">
+          
+          {/* Header Bar */}
+          <header className="flex items-center justify-between border-b border-slate-200 pb-4 mb-6">
+            <div className="flex items-center space-x-3">
+              {/* RedNote Red Icon with crisp white text */}
+              <div className="w-10 h-10 bg-[#FF2442] rounded-xl flex items-center justify-center shadow-sm">
+                <span className="text-white font-extrabold text-xs tracking-tight">RedNote</span>
+              </div>
+              <div>
+                <h1 className="font-bold text-slate-900 text-lg md:text-xl leading-tight">Lost in the comments?</h1>
+                <p className="text-xs text-slate-500 font-medium">Language, help and participation on RedNote</p>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2 md:space-x-4">
+              <button
+                onClick={() => setShowAbout(true)}
+                className="text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-lg transition-colors"
+              >
+                About research
+              </button>
+              <button
+                onClick={resetExhibition}
+                className="text-xs font-semibold text-[#FF2442] bg-pink-50 hover:bg-pink-100 border border-pink-200 px-3 py-2 rounded-lg transition-colors flex items-center space-x-1"
+              >
+                <span>🔄</span>
+                <span>Start again</span>
+              </button>
+            </div>
+          </header>
+
+          {/* Progress Indicator */}
+          <nav aria-label="Progress" className="mb-8">
+            <ol className="flex items-center w-full">
+              {[
+                { title: "Intro", step: 0 },
+                { title: "1. Expression", step: 1 },
+                { title: "2. Support", step: 2 },
+                { title: "3. Expectations", step: 3 },
+                { title: "4. Findings", step: 4 }
+              ].map((item, idx) => (
+                <li key={idx} className={`flex-1 flex items-center ${idx < 4 ? 'after:content-[""] after:w-full after:h-1 after:border-b after:border-slate-200 after:mx-2' : ''}`}>
+                  <button
+                    onClick={() => setCurrentStep(item.step)}
+                    className={`flex items-center space-x-2 text-xs font-bold transition-all ${
+                      currentStep === item.step
+                        ? 'text-[#FF2442]'
+                        : currentStep > item.step
+                        ? 'text-slate-700'
+                        : 'text-slate-300'
+                    }`}
+                  >
+                    <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+                      currentStep === item.step
+                        ? 'bg-[#FF2442] text-white shadow-sm'
+                        : currentStep > item.step
+                        ? 'bg-slate-200 text-slate-700'
+                        : 'bg-slate-100 text-slate-400'
+                    }`}>
+                      {item.step + 1}
+                    </span>
+                    <span className="hidden md:inline">{item.title}</span>
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </nav>
+
+          {/* Main Interactive Content */}
+          <main className="flex-1">
+
+            {/* STEP 0: OPENING */}
+            {currentStep === 0 && (
+              <div className="space-y-8 animate-fadeIn">
+                <div className="bg-white rounded-2xl p-6 md:p-10 border border-slate-100 shadow-sm space-y-6">
+                  <div className="inline-block px-3 py-1 bg-pink-50 border border-pink-200 text-[#FF2442] text-xs font-bold rounded-full">
+                    Digital Exhibition — University Global Media Research
+                  </div>
+                  <h2 className="text-2xl md:text-4xl font-extrabold text-slate-900 leading-tight">
+                    In January 2025, international newcomers entered a predominantly Chinese-language community.
+                  </h2>
+                  <p className="text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl">
+                    How did users help one another communicate—and discuss which languages to use?
+                  </p>
+                  
+                  {/* Scope & Context Card */}
+                  <div className="bg-amber-50/60 border border-amber-200/80 rounded-xl p-4 md:p-5 text-xs md:text-sm text-slate-700 space-y-2">
+                    <div className="font-bold text-amber-900 flex items-center space-x-2">
+                      <span>📌</span>
+                      <span>Brief Context & Research Scope</span>
+                    </div>
+                    <p className="leading-relaxed">
+                      <strong>Context:</strong> Uncertainty over TikTok's availability in the United States prompted some users to seek alternatives. Their arrival on China's RedNote brought international newcomers into contact with an existing, predominantly Chinese-language platform community.
+                    </p>
+                    <p className="leading-relaxed">
+                      <strong>Scope:</strong> We examine selected January 2025 RedNote posts and visible comment exchanges concerning language support and expectations to include Chinese. This is a qualitative study of selected exchanges, not a representative survey of the entire platform.
+                    </p>
+                  </div>
+
+                  <div className="pt-4">
+                    <button
+                      onClick={() => setCurrentStep(1)}
+                      className="w-full md:w-auto bg-[#FF2442] hover:bg-[#E01E37] text-white font-bold px-8 py-4 rounded-xl shadow-md transition-all transform active:scale-95 text-center text-base"
+                    >
+                      Enter the comments →
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* STEP 1: ENCOUNTER 1 */}
+            {currentStep === 1 && (
+              <div className="space-y-6 animate-fadeIn">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase tracking-wider text-pink-600">Encounter 1 of 3</span>
+                  <span className="text-xs text-slate-400">An unfamiliar expression</span>
+                </div>
+
+                {/* Comment Card Display */}
+                <div className="bg-white rounded-2xl p-6 md:p-8 border border-slate-100 shadow-sm space-y-6">
+                  <div className="border-l-4 border-[#FF2442] pl-4 py-1">
+                    <div className="text-xs text-slate-400 font-semibold mb-1">Comment excerpt</div>
+                    <div className="text-3xl font-extrabold text-slate-900">“666”</div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-slate-800 text-base">What does this mean here?</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <button
+                        onClick={() => setEnc1Revealed(true)}
+                        className="p-3 text-left border border-slate-200 hover:border-pink-300 hover:bg-pink-50/50 rounded-xl font-medium text-xs md:text-sm text-slate-700 transition-colors"
+                      >
+                        💡 I know
+                      </button>
+                      <button
+                        onClick={() => setEnc1Revealed(true)}
+                        className="p-3 text-left border border-slate-200 hover:border-pink-300 hover:bg-pink-50/50 rounded-xl font-medium text-xs md:text-sm text-slate-700 transition-colors"
+                      >
+                        🤔 I’m not sure
+                      </button>
+                      <button
+                        onClick={() => setEnc1Revealed(true)}
+                        className="p-3 text-left border border-pink-200 bg-pink-50 text-[#FF2442] rounded-xl font-bold text-xs md:text-sm transition-colors"
+                      >
+                        ✨ Show an explanation
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Revealed Explanation */}
+                  {enc1Revealed && (
+                    <div className="space-y-6 pt-4 border-t border-slate-100 animate-fadeIn">
+                      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 md:p-5 space-y-3">
+                        <div className="text-xs font-bold uppercase tracking-wide text-slate-500">Video Context Explanation</div>
+                        <p className="text-base font-semibold text-slate-900">
+                          “In the selected creator's video, '666' is explained as 'very good'.”
+                        </p>
+                        <p className="text-xs text-slate-500 leading-relaxed">
+                          * Note: This is the meaning presented in this particular video and context, rather than an exhaustive definition for every use.
+                        </p>
+                      </div>
+
+                      {/* Research Explanation */}
+                      <div className="bg-sky-50/70 border border-sky-200 rounded-xl p-4 md:p-5 space-y-2">
+                        <div className="text-xs font-bold uppercase tracking-wide text-sky-800">Research Explanation</div>
+                        <p className="text-xs md:text-sm text-sky-900 leading-relaxed">
+                          {ARCHIVAL_EVIDENCE.IMG_3671.explanation}
+                        </p>
+                      </div>
+
+                      <div className="flex flex-wrap gap-3 items-center justify-between pt-2">
+                        <button
+                          onClick={() => setActiveModalEvidence(ARCHIVAL_EVIDENCE.IMG_3671)}
+                          className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl text-xs flex items-center space-x-2 transition-colors"
+                        >
+                          <span>🔍</span>
+                          <span>See the evidence (IMG_3671.PNG)</span>
+                        </button>
+
+                        <button
+                          onClick={() => setCurrentStep(2)}
+                          className="px-6 py-2.5 bg-[#FF2442] hover:bg-[#E01E37] text-white font-bold rounded-xl text-xs transition-colors shadow-sm"
+                        >
+                          Next Encounter →
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* STEP 2: ENCOUNTER 2 */}
+            {currentStep === 2 && (
+              <div className="space-y-6 animate-fadeIn">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase tracking-wider text-pink-600">Encounter 2 of 3</span>
+                  <span className="text-xs text-slate-400">Asking for practical language help</span>
+                </div>
+
+                <div className="bg-amber-50/50 border border-amber-200/60 rounded-xl p-3 text-xs text-amber-900 font-medium">
+                  ℹ️ This is a DIFFERENT real exchange, not a continuation of Encounter 1.
+                </div>
+
+                {/* Comment Thread Simulation */}
+                <div className="bg-white rounded-2xl p-6 md:p-8 border border-slate-100 shadow-sm space-y-6">
+                  
+                  {/* Step 2.1: Request */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-slate-500">Participant: Shelby</span>
+                      <span className="text-xs text-slate-400">Verified excerpt</span>
+                    </div>
+                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs md:text-sm font-medium text-slate-800">
+                      “But I would like to learn how to translate my keyboard to mandarin.”
+                    </div>
+                  </div>
+
+                  {/* Step 2.2: Advice Button / Content */}
+                  {enc2Stage === 1 && (
+                    <button
+                      onClick={() => setEnc2Stage(2)}
+                      className="w-full py-3 bg-pink-50 border border-pink-200 text-[#FF2442] font-bold text-xs md:text-sm rounded-xl transition-colors hover:bg-pink-100"
+                    >
+                      👇 Show the advice
+                    </button>
+                  )}
+
+                  {enc2Stage >= 2 && (
+                    <div className="ml-4 md:ml-8 pl-4 border-l-2 border-slate-200 space-y-4 animate-fadeIn">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-slate-500">Responding Participant</span>
+                          <span className="text-xs text-slate-400 font-mono">發芽的綠豆</span>
+                        </div>
+                        <div className="bg-sky-50/50 p-4 rounded-xl border border-sky-100 text-xs md:text-sm text-slate-800 space-y-1">
+                          <p className="font-semibold text-slate-900">“很多美国人都用 google translate啊”</p>
+                          <p className="text-slate-600">“Many Americans are using google translate!”</p>
+                        </div>
+                        <p className="text-[11px] text-slate-400 italic">
+                          * Note: Treat “Many Americans are using google translate!” as the participant's statement, not a verified usage statistic.
+                        </p>
+                      </div>
+
+                      {enc2Stage === 2 && (
+                        <button
+                          onClick={() => setEnc2Stage(3)}
+                          className="w-full py-3 bg-pink-50 border border-pink-200 text-[#FF2442] font-bold text-xs md:text-sm rounded-xl transition-colors hover:bg-pink-100"
+                        >
+                          👇 Show the response
+                        </button>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Step 2.3: Response Content */}
+                  {enc2Stage >= 3 && (
+                    <div className="ml-8 md:ml-12 pl-4 border-l-2 border-pink-200 space-y-4 animate-fadeIn">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-slate-500">Shelby's Acknowledgment</span>
+                        </div>
+                        <div className="bg-pink-50/50 p-4 rounded-xl border border-pink-100 text-xs md:text-sm font-semibold text-slate-900 space-y-1">
+                          <p>“谢谢贴！” (English gloss: “Thank you!”)</p>
+                        </div>
+                      </div>
+
+                      {/* Research Analysis */}
+                      <div className="bg-sky-50/70 border border-sky-200 rounded-xl p-4 text-xs md:text-sm text-sky-900 leading-relaxed space-y-1">
+                        <div className="font-bold uppercase tracking-wide text-xs text-sky-800">Research Explanation</div>
+                        <p>{ARCHIVAL_EVIDENCE.IMG_3677.explanation}</p>
+                        <p className="text-[11px] text-sky-700 italic pt-1">
+                          * Note: Do not claim that the advice successfully configured the keyboard, produced an accurate translation, or improved language proficiency.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Peer Correction Card (Optional Slang Correction) */}
+                  <div className="pt-4 border-t border-slate-100">
+                    <button
+                      onClick={() => setShowPeerCorrection(!showPeerCorrection)}
+                      className="text-xs font-bold text-slate-600 hover:text-slate-900 flex items-center space-x-1"
+                    >
+                      <span>{showPeerCorrection ? '▼ Hide' : '▶ Show'} optional material: Peer correction example (IMG_3674.PNG)</span>
+                    </button>
+
+                    {showPeerCorrection && (
+                      <div className="mt-3 bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs space-y-3 animate-fadeIn">
+                        <div className="font-bold text-slate-800">Optional Peer Correction Example:</div>
+                        <div className="space-y-1 text-slate-700">
+                          <p><strong>Anthony:</strong> “yyds = 永远都是 means always the god (G.O.A.T)”</p>
+                          <p><strong>好运大王 (Responding Participant):</strong> “yyds 永远的神”</p>
+                        </div>
+                        <div className="bg-white p-3 rounded-lg border border-slate-200 text-slate-600">
+                          <strong>Research Analysis:</strong> The explanation is supplemented and corrected by another participant. (Note: Do not claim that the original commenter accepted the correction or achieved lasting learning).
+                        </div>
+                        <button
+                          onClick={() => setActiveModalEvidence(ARCHIVAL_EVIDENCE.IMG_3674)}
+                          className="text-xs font-bold text-[#FF2442] hover:underline"
+                        >
+                          Inspect IMG_3674.PNG source screenshot →
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Footer Action Buttons */}
+                  <div className="flex flex-wrap gap-3 items-center justify-between pt-4 border-t border-slate-100">
+                    <button
+                      onClick={() => setActiveModalEvidence(ARCHIVAL_EVIDENCE.IMG_3677)}
+                      className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl text-xs flex items-center space-x-2 transition-colors"
+                    >
+                      <span>🔍</span>
+                      <span>See the evidence (IMG_3677.PNG)</span>
+                    </button>
+
+                    <button
+                      onClick={() => setCurrentStep(3)}
+                      className="px-6 py-2.5 bg-[#FF2442] hover:bg-[#E01E37] text-white font-bold rounded-xl text-xs transition-colors shadow-sm"
+                    >
+                      Next Encounter →
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* STEP 3: ENCOUNTER 3 */}
+            {currentStep === 3 && (
+              <div className="space-y-6 animate-fadeIn">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase tracking-wider text-pink-600">Encounter 3 of 3</span>
+                  <span className="text-xs text-slate-400">Expectations to include Chinese</span>
+                </div>
+
+                <div className="bg-amber-50/50 border border-amber-200/60 rounded-xl p-3 text-xs text-amber-900 font-medium">
+                  ℹ️ Introduce another separate exchange (Note: Shelby's request and this language-expectation exchange are from the same parent post).
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 md:p-8 border border-slate-100 shadow-sm space-y-6">
+                  
+                  {/* Paraphrased Context */}
+                  <div className="bg-slate-50 border-l-4 border-slate-800 p-4 rounded-r-xl space-y-1">
+                    <div className="text-[11px] font-bold text-slate-400 uppercase">Labelled Paraphrase</div>
+                    <p className="text-xs md:text-sm font-semibold text-slate-800">
+                      “A participant recirculates a request asking newcomers to include a Chinese translation when posting or commenting.”
+                    </p>
+                  </div>
+
+                  {/* Hypothetical Visitor Reflection Question */}
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-slate-800 text-base">How would you respond?</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      {[
+                        { key: 'include', label: 'Include a Chinese translation' },
+                        { key: 'ask', label: 'Ask how to translate' },
+                        { key: 'explain', label: 'Explain a difficulty' }
+                      ].map(opt => (
+                        <button
+                          key={opt.key}
+                          onClick={() => setEnc3Choice(opt.key)}
+                          className={`p-4 text-left border rounded-xl font-semibold text-xs md:text-sm transition-all ${
+                            enc3Choice === opt.key
+                              ? 'border-[#FF2442] bg-pink-50/80 text-[#FF2442] shadow-sm'
+                              : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white'
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Hypothetical Reflection Outcome */}
+                  {enc3Choice && (
+                    <div className="bg-pink-50/60 border border-pink-200 rounded-xl p-4 md:p-5 space-y-2 animate-fadeIn">
+                      <div className="text-xs font-bold text-[#FF2442] uppercase tracking-wide">Your reflection</div>
+                      <p className="text-xs md:text-sm text-slate-800 leading-relaxed font-medium">
+                        {enc3Choice === 'include' && "“Adding Chinese may make a message more accessible to readers who use Chinese. What support would help you do this?”"}
+                        {enc3Choice === 'ask' && "“An expectation to translate can create a need for practical language support.”"}
+                        {enc3Choice === 'explain' && "“Participation expectations may be difficult to meet when language knowledge or translation resources are limited.”"}
+                      </p>
+                      <p className="text-[11px] text-slate-400 italic">
+                        * Note: These choices are hypothetical visitor reflections; they are not actual responses found in the research data.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* See Actual Exchange Button */}
+                  {(!enc3RevealedActual) ? (
+                    <button
+                      onClick={() => setEnc3RevealedActual(true)}
+                      className="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs md:text-sm rounded-xl transition-colors shadow-sm"
+                    >
+                      See the actual exchange →
+                    </button>
+                  ) : (
+                    <div className="space-y-6 pt-4 border-t border-slate-100 animate-fadeIn">
+                      <div className="space-y-4">
+                        <div className="text-xs font-bold uppercase tracking-wide text-slate-500">Verified Evidence Excerpt</div>
+                        
+                        {/* Reposted Image Context */}
+                        <div className="bg-slate-900 text-slate-100 p-4 rounded-xl text-xs space-y-2">
+                          <div className="text-slate-400 text-[11px] font-mono">Image reposted by participant 發芽的綠豆 (containing comment attributed to Oniss):</div>
+                          <p className="italic font-sans text-slate-200">
+                            “if you're going to comment and post make sure to leave a chinese translation as well! it's their app and they shouldn't have to adapt to us”
+                          </p>
+                          <p className="text-slate-400 text-[11px]">
+                            (如果您要评论和发帖，请务必留下中文翻译！这是他们的应用程序，他们不应该适应我们)
+                          </p>
+                        </div>
+
+                        {/* Direct Replies */}
+                        <div className="pl-4 border-l-2 border-slate-200 space-y-3 text-xs md:text-sm">
+                          <div className="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                            <span className="font-bold text-slate-700">laurenator424: </span>
+                            <span className="text-slate-900 font-semibold">“回复 發芽的綠豆: ok! 好”</span>
+                          </div>
+                          <div className="bg-pink-50/50 p-3 rounded-lg border border-pink-100">
+                            <span className="font-bold text-slate-700">發芽的綠豆: </span>
+                            <span className="text-slate-900 font-semibold">“回复 laurenator424: 谢谢你 Thank you!”</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Research Explanation with Strict Attributions */}
+                      <div className="bg-sky-50/70 border border-sky-200 rounded-xl p-4 md:p-5 space-y-3 text-xs md:text-sm text-sky-900">
+                        <div className="font-bold uppercase tracking-wide text-xs text-sky-800">Research Explanation & Attribution</div>
+                        <p className="leading-relaxed font-medium">
+                          {ARCHIVAL_EVIDENCE.IMG_3678.explanation}
+                        </p>
+                        <ul className="list-disc pl-5 space-y-1 text-xs text-sky-800 leading-relaxed">
+                          <li>The request attributed to Oniss appears INSIDE a reposted image.</li>
+                          <li>Do not attribute that request to the creator of the parent post.</li>
+                          <li>“Their app” is the participant's claim, not the researchers' position.</li>
+                          <li>“ok! 好” shows acknowledgement in this exchange, not proof of later compliance.</li>
+                          <li>The final “谢谢你 / Thank you!” comes from the participant who reposted the request.</li>
+                          <li>This is not the same conversation as Shelby's request for translation help.</li>
+                          <li>Do not present this as an official Chinese-only platform policy.</li>
+                        </ul>
+                      </div>
+
+                      <div className="flex flex-wrap gap-3 items-center justify-between pt-2">
+                        <button
+                          onClick={() => setActiveModalEvidence(ARCHIVAL_EVIDENCE.IMG_3678)}
+                          className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl text-xs flex items-center space-x-2 transition-colors"
+                        >
+                          <span>🔍</span>
+                          <span>See the evidence (IMG_3678.PNG)</span>
+                        </button>
+
+                        <button
+                          onClick={() => setCurrentStep(4)}
+                          className="px-6 py-2.5 bg-[#FF2442] hover:bg-[#E01E37] text-white font-bold rounded-xl text-xs transition-colors shadow-sm"
+                        >
+                          View Research Findings →
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* STEP 4: FINDINGS & FUTURE */}
+            {currentStep === 4 && (
+              <div className="space-y-8 animate-fadeIn">
+                <div className="text-center space-y-2 max-w-2xl mx-auto">
+                  <span className="text-xs font-bold uppercase tracking-wider text-pink-600">Research Synthesis</span>
+                  <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900">Findings & Future Implication</h2>
+                  <p className="text-xs md:text-sm text-slate-500">Summary of qualitative observations from selected January 2025 RedNote comment exchanges.</p>
+                </div>
+
+                {/* Parallel Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm space-y-3">
+                    <div className="w-8 h-8 rounded-lg bg-pink-100 text-[#FF2442] flex items-center justify-center font-bold text-sm">
+                      1
+                    </div>
+                    <h3 className="font-extrabold text-slate-900 text-sm uppercase tracking-wide">Language Support</h3>
+                    <p className="text-slate-700 text-sm md:text-base font-semibold leading-relaxed">
+                      “Users offered explanations, corrections and practical translation advice.”
+                    </p>
+                  </div>
+
+                  <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm space-y-3">
+                    <div className="w-8 h-8 rounded-lg bg-sky-100 text-sky-800 flex items-center justify-center font-bold text-sm">
+                      2
+                    </div>
+                    <h3 className="font-extrabold text-slate-900 text-sm uppercase tracking-wide">Language Expectations</h3>
+                    <p className="text-slate-700 text-sm md:text-base font-semibold leading-relaxed">
+                      “Some participants asked newcomers to include Chinese in their communication.”
+                    </p>
+                  </div>
+                </div>
+
+                {/* LANGUAGE-USE SUB-ARGUMENT (HIGHLIGHTED) */}
+                <div className="bg-gradient-to-br from-pink-500 to-[#FF2442] text-white rounded-2xl p-6 md:p-8 shadow-md space-y-3">
+                  <div className="text-xs font-bold uppercase tracking-wider text-pink-200">Language-Use Sub-Argument</div>
+                  <blockquote className="text-lg md:text-2xl font-extrabold leading-snug">
+                    “Users negotiated language use by providing language support and expressing expectations that newcomers would include Chinese in their communication.”
+                  </blockquote>
+                </div>
+
+                {/* Interpretive Sentence */}
+                <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 text-xs md:text-sm text-slate-700 font-medium leading-relaxed">
+                  “In these selected exchanges, communication involved both help with language and expectations about adapting communication to an existing platform environment.”
+                </div>
+
+                {/* TREND STATEMENT */}
+                <div className="bg-white border-l-4 border-slate-800 rounded-r-xl p-5 shadow-sm space-y-2">
+                  <div className="text-xs font-bold text-slate-400 uppercase tracking-wide">Trend Statement</div>
+                  <p className="text-sm md:text-base font-bold text-slate-800 leading-relaxed">
+                    “The January 2025 RedNote influx illustrates an emerging trend of global media: cross-border platform migration brings users into contact with different languages.”
+                  </p>
+                </div>
+
+                {/* FUTURE STATEMENT */}
+                <div className="bg-sky-50 border border-sky-200 rounded-2xl p-6 md:p-8 space-y-4">
+                  <div className="text-xs font-bold uppercase tracking-wider text-sky-800">Future Implication</div>
+                  <blockquote className="text-lg md:text-xl font-extrabold text-sky-950 leading-relaxed">
+                    “This case points towards a future of interconnected, culturally distinct platform communities, making language support a key priority for inclusive cross-border participation.”
+                  </blockquote>
+
+                  <div className="pt-2 border-t border-sky-200/60 space-y-2">
+                    <div className="text-xs font-bold text-sky-900">Accessible Takeaway:</div>
+                    <p className="text-sm font-semibold text-sky-800">
+                      “Connecting people across borders also means supporting communication across languages.”
+                    </p>
+                  </div>
+                </div>
+
+                {/* Interactive Reflection Question */}
+                <div className="bg-amber-50/70 border border-amber-200 rounded-2xl p-6 text-center space-y-3">
+                  <div className="text-xs font-bold text-amber-800 uppercase tracking-wide">Inviting Visitor Reflection</div>
+                  <p className="text-base md:text-lg font-bold text-slate-900">
+                    “When people enter a new platform community, what support helps them participate?”
+                  </p>
+                  <p className="text-xs text-slate-500 max-w-xl mx-auto">
+                    * Note: This case study does not predict the future of every platform or prove long-term integration.
+                  </p>
+                </div>
+
+                {/* Reset or Review Controls */}
+                <div className="flex flex-wrap gap-4 items-center justify-between pt-4 border-t border-slate-200">
+                  <button
+                    onClick={() => setCurrentStep(0)}
+                    className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors"
+                  >
+                    ← Return to Overview
+                  </button>
+                  <button
+                    onClick={resetExhibition}
+                    className="px-8 py-3 bg-[#FF2442] hover:bg-[#E01E37] text-white font-bold rounded-xl text-xs shadow-md transition-all"
+                  >
+                    Reset for Next Visitor 🔄
+                  </button>
+                </div>
+              </div>
+            )}
+
+          </main>
+
+          {/* Footer & Credits */}
+          <footer className="mt-12 pt-6 border-t border-slate-200 flex flex-col md:flex-row items-center justify-between text-xs text-slate-400 gap-4">
+            <div>
+              Global Media Research Project — Exhibition Web App
+            </div>
+            
+            {/* Editable Project Team Credits Placeholder */}
+            <div className="flex items-center space-x-2 bg-slate-100 px-3 py-1.5 rounded-lg text-slate-500 font-mono">
+              <span>Project: [Insert Project Title]</span>
+              <span>•</span>
+              <span>Team: [Insert Team Names]</span>
+            </div>
+          </footer>
+
+          {/* Modal: About Research */}
+          {showAbout && (
+            <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
+              <div className="bg-white rounded-2xl max-w-2xl w-full p-6 md:p-8 space-y-6 max-h-[90vh] overflow-y-auto custom-scrollbar shadow-2xl">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                  <h3 className="text-lg font-extrabold text-slate-900">About this research</h3>
+                  <button
+                    onClick={() => setShowAbout(false)}
+                    className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center font-bold text-slate-500"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div className="space-y-4 text-xs md:text-sm text-slate-600 leading-relaxed">
+                  <div>
+                    <h4 className="font-bold text-slate-900 mb-1">Full Project Research Question</h4>
+                    <p className="bg-slate-50 p-3 rounded-lg border border-slate-200 italic font-medium text-slate-800">
+                      “How did established RedNote users and international newcomers negotiate language use and community norms during the January 2025 influx?”
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-slate-900 mb-1">Exhibition Focus & Scope</h4>
+                    <p>
+                      This website focuses specifically on <strong>LANGUAGE USE</strong>. A separate printed brochure addresses community norms and “cat tax”, so that content is not reproduced here.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-slate-900 mb-1">Language Scope Note</h4>
+                    <p>
+                      This exhibition foregrounds English–Chinese encounters; it does not represent every language used on RedNote during this period.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-slate-900 mb-1">Methodological Disclaimer</h4>
+                    <p>
+                      This is a qualitative study of selected exchanges, not a representative survey of the entire platform. No personal data or visitor choices are collected or saved.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-slate-100 flex justify-end">
+                  <button
+                    onClick={() => setShowAbout(false)}
+                    className="px-6 py-2.5 bg-slate-900 text-white font-bold text-xs rounded-xl hover:bg-slate-800"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Modal: See Evidence (Archival Image Inspector) */}
+          {activeModalEvidence && (
+            <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-fadeIn">
+              <div className="bg-white rounded-2xl max-w-3xl w-full p-6 md:p-8 space-y-6 max-h-[92vh] overflow-y-auto custom-scrollbar shadow-2xl">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-pink-600">Archival Evidence Excerpt</span>
+                    <h3 className="text-base md:text-lg font-extrabold text-slate-900">{activeModalEvidence.title}</h3>
+                  </div>
+                  <button
+                    onClick={() => setActiveModalEvidence(null)}
+                    className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center font-bold text-slate-500"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                {/* Original Uncropped Mobile Screenshot Image Display */}
+                <div className="flex flex-col md:flex-row gap-6 items-start">
+                  <div className="w-full md:w-1/2 flex justify-center bg-black p-3 rounded-2xl shadow-inner">
+                    <img
+                      src={activeModalEvidence.image}
+                      alt={`Archival evidence screenshot ${activeModalEvidence.id}`}
+                      className="max-h-[450px] w-auto object-contain rounded-lg border border-slate-800"
+                    />
+                  </div>
+
+                  <div className="w-full md:w-1/2 space-y-4 text-xs md:text-sm">
+                    <div className="space-y-2">
+                      <div className="font-bold text-slate-900 uppercase tracking-wide text-xs">Readable Transcription</div>
+                      <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2 max-h-[220px] overflow-y-auto custom-scrollbar">
+                        {activeModalEvidence.transcription.map((item, i) => (
+                          <div key={i} className="space-y-0.5">
+                            <span className="font-bold text-slate-700 block text-[11px]">{item.speaker}:</span>
+                            <p className="text-slate-800 text-xs leading-relaxed">{item.text}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="font-bold text-slate-900 uppercase tracking-wide text-xs">Researcher Analysis</div>
+                      <p className="text-xs text-sky-900 bg-sky-50 border border-sky-200 p-3 rounded-xl leading-relaxed">
+                        {activeModalEvidence.explanation}
+                      </p>
+                    </div>
+
+                    <div className="text-[10px] text-slate-400 font-mono">
+                      Source Identifier: {activeModalEvidence.id}.PNG
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-slate-100 flex justify-end">
+                  <button
+                    onClick={() => setActiveModalEvidence(null)}
+                    className="px-6 py-2.5 bg-slate-900 text-white font-bold text-xs rounded-xl hover:bg-slate-800"
+                  >
+                    Close Evidence Inspector
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+        </div>
+      );
+    }
+
+    // Render App Component
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
